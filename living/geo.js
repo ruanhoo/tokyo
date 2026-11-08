@@ -8,7 +8,7 @@
   const MAG = 0.5; const SIG = 380;
   const CORE = { x0: -1000, x1: 1050, y0: -1000, y1: 1050 };
   const GAP = 90; const COMP = 0.4;
-  const WORLD = { x0: -1950, y0: -1250, x1: 1750, y1: 1700 };
+  const WORLD = { x0: -1950, y0: -1900, x1: 1750, y1: 1700 };
   const squeeze = (v, a, b) => (v < a ? a - GAP + (v - a) * COMP : v > b ? b + GAP + (v - b) * COMP : v);
   function P(lat, lng) {
     let x = (lng - LNG0) * KLNG * SC; let y = -(lat - LAT0) * KLAT * SC;

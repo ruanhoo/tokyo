@@ -9,11 +9,12 @@ A cartoon, mobile-friendly, bilingual (English / 中文) travel site for Tokyo.
 
 - **Tokyo Tower**, Tokyo Station, Shibuya, Shinjuku, Asakusa, Ueno, Ginza, Akihabara, Odaiba and the Rainbow Bridge.
 - **Yamanote Line**: a closed loop on an elevated deck, with trains stopping at stations.
-- **Shinkansen**: Tokaido and Tohoku bullet trains arriving at, dwelling in and leaving Tokyo Station. Click a train to see its card, or ride along.
+- **Shinkansen**: Tokaido and Tohoku bullet trains arriving at, dwelling in and leaving Tokyo Station (Tohoku trains also call at Omiya). Click a train to see its card, or ride along.
 - **Subway X-ray**: six colour-coded lines drawn under the streets, with a legend.
+- **Saitama day trip**: Omiya Station (the Tohoku Shinkansen stops there), The Railway Museum with its steam locomotive, Omiya Bonsai Village, Kawagoe "Little Edo" and Urawa unagi, laid out as a small town north of Tokyo.
 - **Haneda Airport** with planes, plus boats on the river and bay.
 - Day, dusk and night lighting, and a pause button.
-- **Route planner**: pick places or use your favourites, choose a start, travel mode and pace, and get a timed itinerary. It sends far-away places (such as Mt. Fuji) first, as day trips by express train.
+- **Route planner**: pick places or use your favourites, choose a start, travel mode and pace, and get a timed itinerary. It sends far-away places (such as Mt. Fuji or Saitama) first, as day trips by express train.
 - City journal, follow-a-person mode, a Stationmaster who makes announcements, favourites kept in `localStorage`, and a teleport portal to other cities.
 
 ## Run it locally

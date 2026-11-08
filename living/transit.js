@@ -126,6 +126,10 @@ const SHD = { cars: 8, carL: 26, cap: 12, vmax: 190, acc: 60, dwell: 9, off: 8 }
 const SHL = SHD.cars * SHD.carL + SHD.cap * 2;
 const SHIN_DEST = { tohoku: ['Sendai', '仙台'], tokaido: ['Shin-Osaka', '新大阪'] };
 const shinEdge = {};
+// the Tohoku line also calls at Omiya (Saitama): the platform centre sits at OM_S along the path
+const OM_Y = -1520; let OM_S = 0;
+{ const pa = SHN.tohoku.path; let bd = 1e9; for (let s = 0; s < pa.L; s += 2) { const q = pathAt(pa, s, 0); const d = Math.abs(q.y - OM_Y) + Math.abs(q.x) * 0.2; if (d < bd) { bd = d; OM_S = s; } } }
+const OM_D = OM_S - SHL / 2;
 for (const key of ['tohoku', 'tokaido']) {
   const pa = SHN[key].path; let e = pa.L;
   for (let s = 0; s < pa.L; s += 12) { const q = pathAt(pa, s); if (outsideWorld(q.x, q.y)) { e = s; break; } }
@@ -139,6 +143,15 @@ for (const key of ['tohoku', 'tokaido']) {
     if (!onScreen(sx(mid.x), sy(mid.y, 40), 260 * cam.z + 60)) return;
     platformSide(sides[1], SHL, 14, 30, 39.6, 74, '#e6eaf2', { txt: tx('shinLabel').replace(/^\S+\s/, ''), col: SHN[key].c, no: key === 'tohoku' ? 'E' : 'T' });
   } });
+  if (key === 'tohoku') {
+    const osides = [pathAt(pa, OM_S, DECK_SHIN.hw + 7), pathAt(pa, OM_S, -(DECK_SHIN.hw + 7))].sort((a, b) => a.y - b.y);
+    const omid = pathAt(pa, OM_S, 0);
+    statics.push({ y: osides[0].y - 40, f: () => { if (onScreen(sx(omid.x), sy(omid.y, 40), 260 * cam.z + 60)) platformSide(osides[0], SHL, 14, 30, 39.6, 74, '#e6eaf2', null); } });
+    statics.push({ y: osides[1].y + 80, f: () => {
+      if (!onScreen(sx(omid.x), sy(omid.y, 40), 260 * cam.z + 60)) return;
+      platformSide(osides[1], SHL, 14, 30, 39.6, 74, '#e6eaf2', { txt: tx('omiyaPlat'), col: SHN[key].c, no: 'E' });
+    } });
+  }
   const b0 = pathAt(pa, 1, 0);
   statics.push({ y: b0.y + 10, f: () => { if (onScreen(sx(b0.x), sy(b0.y, 40), 80)) obox(b0.x, b0.y, b0.a, 8, 38, 38, 46, '#e8503a', '#c8402c'); } });
 }
@@ -149,19 +162,31 @@ const shinTrack = (t, dd) => {
   const u = clamp(dd / 260, 0, 1); return SHD.off - 2 * SHD.off * (u * u * (3 - 2 * u));
 };
 function updShin(t, dt) {
-  const edge = shinEdge[t.line];
+  const edge = shinEdge[t.line]; const tk = t.line === 'tohoku';
+  if (t.hold > 0) { t.hold -= dt; t.v = 0; return; }
   if (t.phase === 'wait') {
     t.timer -= dt;
-    if (t.timer <= 0 && !shinTrains.some((o) => o !== t && o.line === t.line && (o.phase === 'arrive' || o.phase === 'dwell'))) { t.phase = 'arrive'; t.d = edge + 20; t.v = SHD.vmax; }
+    const busy = shinTrains.some((o) => o !== t && o.line === t.line && (tk ? o.phase !== 'wait' : (o.phase === 'arrive' || o.phase === 'dwell')));
+    if (t.timer <= 0 && !busy) { t.phase = 'arrive'; t.d = edge + 20; t.v = SHD.vmax; t.omA = false; t.omD = false; }
   } else if (t.phase === 'arrive') {
-    t.v = Math.min(SHD.vmax, Math.sqrt(2 * SHD.acc * t.d) + 8);
-    t.d -= t.v * dt;
-    if (t.d <= 0.3) { t.d = 0; t.v = 0; t.phase = 'dwell'; t.timer = SHD.dwell + Math.random() * 3; if (onTrainEvent) onTrainEvent(t, 'arrive'); }
+    const target = tk && !t.omA ? OM_D : 0;
+    const vT = Math.min(SHD.vmax, Math.sqrt(2 * SHD.acc * Math.max(0, t.d - target)) + 6);
+    t.v = Math.min(vT, t.v + SHD.acc * 1.5 * dt);
+    t.d = Math.max(target, t.d - t.v * dt);
+    if (t.d - target <= 0.3) {
+      t.d = target; t.v = 0;
+      if (target > 0) { t.omA = true; t.hold = 4 + Math.random() * 2; if (onTrainEvent) onTrainEvent(t, 'omiya'); }
+      else { t.phase = 'dwell'; t.timer = SHD.dwell + Math.random() * 3; if (onTrainEvent) onTrainEvent(t, 'arrive'); }
+    }
   } else if (t.phase === 'dwell') {
     t.timer -= dt;
     if (t.timer <= 0) { t.phase = 'depart'; t.v = 0; if (onTrainEvent) onTrainEvent(t, 'depart'); }
   } else {
-    t.v = Math.min(SHD.vmax, t.v + SHD.acc * dt); t.d += t.v * dt;
+    const stopAt = tk && !t.omD ? OM_D : Infinity;
+    const vT = Math.min(SHD.vmax, Math.sqrt(2 * SHD.acc * Math.max(0, stopAt - t.d)) + 6);
+    t.v = Math.min(vT, t.v + SHD.acc * dt);
+    t.d = Math.min(stopAt, t.d + t.v * dt);
+    if (stopAt - t.d <= 0.3) { t.d = stopAt; t.v = 0; t.omD = true; t.hold = 4 + Math.random() * 2; if (onTrainEvent) onTrainEvent(t, 'omiya'); return; }
     if (t.d > edge + SHL + 20) { t.phase = 'wait'; t.timer = 6 + Math.random() * 8; }
   }
 }
@@ -442,6 +467,7 @@ function trainInfo(t) {
     return { key: 'metro', dirTxt: (L2 ? t.line.zh : t.line.en), next: L2 ? st.zh : st.en, name: (L2 ? t.line.zh : t.line.en), color: t.line.color };
   }
   const goesIn = t.phase === 'wait' || t.phase === 'arrive' || t.phase === 'dwell';
-  const dest = SHIN_DEST[t.line]; const here = L2 ? '东京' : 'Tokyo';
-  return { key: t.line, dirTxt: tx('toward') + ' ' + (goesIn ? here : dest[L2]), next: goesIn ? here : dest[L2], name: tx('trains')[t.line].name, color: SHN[t.line].c };
+  const dest = SHIN_DEST[t.line]; const here = L2 ? '东京' : 'Tokyo'; const omiya = L2 ? '大宫' : 'Omiya';
+  const callsOmiya = t.line === 'tohoku' && t.phase !== 'wait' && (goesIn ? !t.omA : !t.omD);
+  return { key: t.line, dirTxt: tx('toward') + ' ' + (goesIn ? here : dest[L2]), next: callsOmiya ? omiya : goesIn ? here : dest[L2], name: tx('trains')[t.line].name, color: SHN[t.line].c };
 }

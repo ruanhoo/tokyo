@@ -223,4 +223,41 @@ window.TOKYO_PLACES = [
     blurb: 'Grill bite-size pieces of marbled beef yourself at the table. Dip each in sauce and wrap in lettuce if you like.',
     tip: 'Roppongi has everything from casual grills to luxury counters. Book ahead for dinner.',
   },
+
+  // ---------- SAITAMA (just north of Tokyo) ----------
+  {
+    id: 'omiya', type: 'sight', emoji: '🚉', far: true,
+    name: 'Omiya Station', zh: '大宫站',
+    lat: 35.9064, lng: 139.6237,
+    blurb: 'The big railway hub of Saitama. The Tohoku, Joetsu and Hokuriku Shinkansen lines all stop here, about 30 minutes north of Tokyo Station, and a dozen other lines meet under the same roof.',
+    tip: 'The station has a huge shopping mall inside. Pick up an ekiben bento, then walk ten minutes to the Railway Museum.',
+  },
+  {
+    id: 'railwaymuseum', type: 'sight', emoji: '🚂', far: true,
+    name: 'The Railway Museum', zh: '铁道博物馆',
+    lat: 35.9247, lng: 139.6131,
+    blurb: 'Japan’s great train museum, with more than 30 real trains, from steam locomotives to a bullet train nose you can climb into. There are driving simulators and a huge model railway diorama.',
+    tip: 'One stop from Omiya on the New Shuttle tram. Book the simulators early, they fill up fast on weekends.',
+  },
+  {
+    id: 'bonsai', type: 'sight', emoji: '🌳', far: true,
+    name: 'Omiya Bonsai Village', zh: '大宫盆栽村',
+    lat: 35.9385, lng: 139.6250,
+    blurb: 'A quiet neighbourhood of bonsai nurseries, started by growers who moved here after the 1923 earthquake. Tiny trees, some of them hundreds of years old, line the gardens.',
+    tip: 'Many nurseries are open to visitors, and the small bonsai museum is worth a stop. Most are closed on Thursdays.',
+  },
+  {
+    id: 'kawagoe', type: 'sight', emoji: '🔔', far: true,
+    name: 'Kawagoe “Little Edo”', zh: '川越“小江户”',
+    lat: 35.9250, lng: 139.4855,
+    blurb: 'A merchant town of dark tiled warehouses and old shopfronts, with a wooden bell tower that has rung out the hours for 400 years. It looks like Tokyo did in the Edo era.',
+    tip: 'Try sweet-potato snacks on Candy Alley, and look up at the Toki no Kane bell tower.',
+  },
+  {
+    id: 'unagi', type: 'food', emoji: '🥢', far: true,
+    name: 'Urawa Unagi', zh: '浦和鳗鱼饭',
+    lat: 35.8590, lng: 139.6560,
+    blurb: 'Grilled freshwater eel, glazed with sweet soy and served over rice. Urawa, in Saitama, has been famous for its eel restaurants for hundreds of years.',
+    tip: 'It is a treat meal, so go for lunch when it costs less. The best shops are old family-run places.',
+  },
 ];

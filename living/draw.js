@@ -350,6 +350,64 @@ const DRAW = {
     g.beginPath(); g.moveTo(-3, -53); g.quadraticCurveTo(0, -51, 3, -53); g.stroke();
     if (n > 0.3) lights.push([0, -40, 40, '255,220,160']);
   },
+  omiya(b, n) {
+    ell(4, 3, 72, 10, SH);
+    const wall = '#f3f0ea';
+    box(-60, -34, 120, 34, wall);
+    poly([[60, 0], [70, -6], [70, -40], [60, -34]], shade(wall, -0.2));
+    g.save(); g.fillStyle = '#2f9e6a'; g.fillRect(-60, -9, 120, 4); g.restore();
+    for (let x = -52; x <= 32; x += 17) box(x, -30, 14, 17, n > 0.2 ? '#ffe9a8' : '#bfe3f5', 1.5);
+    g.beginPath(); g.moveTo(-64, -34); g.quadraticCurveTo(0, -66, 64, -34); g.lineTo(64, -29); g.quadraticCurveTo(0, -59, -64, -29); g.closePath(); g.fillStyle = '#3fae7a'; g.fill(); g.stroke();
+    g.beginPath(); g.moveTo(64, -34); g.lineTo(74, -39); g.quadraticCurveTo(10, -72, -54, -41); g.stroke();
+    box(-10, -16, 20, 16, '#4a3b30', 3);
+    box(-27, -56, 54, 15, '#fffdf6', 4);
+    g.save(); g.fillStyle = INK; g.font = '700 11px ' + FONT; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('大宮 OMIYA', 0, -48); g.restore();
+    if (n > 0.2) lights.push([0, -22, 70, '255,215,140']);
+  },
+  museum(b, n) {
+    ell(4, 3, 70, 10, SH);
+    const wall = '#f1e5cf';
+    box(-54, -34, 108, 34, wall);
+    poly([[54, 0], [64, -6], [64, -40], [54, -34]], shade(wall, -0.2));
+    g.beginPath(); g.moveTo(-58, -34); g.quadraticCurveTo(-29, -76, 0, -34); g.quadraticCurveTo(29, -76, 58, -34); g.closePath(); g.fillStyle = '#d9544a'; g.fill(); g.stroke();
+    for (const x of [-40, -12, 16, 38]) box(x - 5, -28, 10, 12, win(n), 1.5);
+    g.beginPath(); g.moveTo(-9, 0); g.lineTo(-9, -12); g.quadraticCurveTo(0, -22, 9, -12); g.lineTo(9, 0); g.closePath(); g.fillStyle = '#4a3b30'; g.fill(); g.stroke();
+    // a steam locomotive on a short track out front
+    g.save(); g.lineWidth = 2; g.strokeStyle = '#6b6672'; g.beginPath(); g.moveTo(-52, 16); g.lineTo(52, 16); g.stroke(); g.restore();
+    const lc = '#2d2a32';
+    box(-34, 2, 48, 12, lc, 4); box(8, -6, 22, 20, '#3a3640', 3); box(5, -9, 28, 4, '#d9544a', 1);
+    box(-28, -6, 7, 10, lc, 1); g.beginPath(); g.moveTo(-31, -6); g.lineTo(-18, -6); g.stroke();
+    ell(-24, 2, 4, 4, '#5b5662', true);
+    for (const x of [-26, -10, 8, 24]) { ell(x, 15, 4.2, 4.2, '#d9544a', true); }
+    const ph = (time * 0.8) % 1;
+    for (let i = 0; i < 3; i++) { const q = (ph + i / 3) % 1; g.globalAlpha = 0.85 * (1 - q); ell(-25 + q * 10, -12 - q * 26, 4 + q * 5, 4 + q * 4, '#ffffff', true); }
+    g.globalAlpha = 1;
+    if (n > 0.2) lights.push([0, -20, 70, '255,210,140']);
+  },
+  bonsai(b, n) {
+    ell(4, 3, 50, 8, SH);
+    box(-44, -7, 88, 7, '#cdbb9a', 2);
+    box(-44, -2, 88, 2, '#b3a07e', 0.5);
+    for (const [x, s] of [[-28, 0.9], [0, 1.15], [28, 0.95]]) {
+      box(x - 9 * s, -16 * s - 5, 18 * s, 9 * s, '#b9714b', 2);
+      g.save(); g.lineWidth = 3.4; g.strokeStyle = '#6b4a30'; g.beginPath(); g.moveTo(x, -16 * s - 5); g.quadraticCurveTo(x - 6 * s, -26 * s - 5, x + 3 * s, -34 * s - 5); g.stroke(); g.restore();
+      ell(x - 1 * s, -38 * s - 5, 14 * s, 8.5 * s, '#4fa34d', true); ell(x - 9 * s, -32 * s - 5, 8 * s, 5.5 * s, '#5fb85b', true); ell(x + 10 * s, -34 * s - 5, 8 * s, 5.5 * s, '#5fb85b', true);
+    }
+    box(-6, -62, 12, 8, '#fffdf6', 2);
+    if (n > 0.3) lights.push([0, -20, 50, '255,230,170']);
+  },
+  belltower(b, n) {
+    ell(4, 2, 34, 6, SH);
+    box(-16, -9, 32, 9, '#cfc7b6', 1.5);
+    box(-12, -48, 24, 40, '#8a5a34', 1);
+    for (const y of [-40, -28, -16]) box(-4, y, 8, 7, win(n), 1);
+    poly([[-20, -48], [20, -48], [12, -60], [-12, -60]], '#4a5560');
+    box(-9, -82, 18, 22, '#a06a3d', 1);
+    g.beginPath(); g.arc(0, -70, 5, Math.PI, 0); g.lineTo(5, -64); g.lineTo(-5, -64); g.closePath(); g.fillStyle = '#e0b440'; g.fill(); g.stroke();
+    poly([[-15, -82], [15, -82], [0, -100]], '#4a5560');
+    g.beginPath(); g.moveTo(0, -100); g.lineTo(0, -108); g.stroke(); ell(0, -109, 2.2, 2.2, '#ffc93c', true);
+    if (n > 0.3) lights.push([0, -64, 40, '255,220,150']);
+  },
   dcastle(b, n) {
     ell(4, 2, 56, 9, SH);
     box(-52, -26, 104, 26, '#ffe9f1');
@@ -603,7 +661,7 @@ function drawGround() {
   // plazas under the outer landmarks
   g.lineWidth = Math.max(1.2, 2 * z); g.setLineDash([10 * z, 7 * z]);
   for (const b of buildings) {
-    if (b.dist !== 'trip' && b.id !== 'disney' && b.id !== 'odaiba') continue; const c = DIST[b.dist].c;
+    if (b.dist !== 'trip' && b.dist !== 'saitama' && b.id !== 'disney' && b.id !== 'odaiba') continue; const c = DIST[b.dist].c;
     g.beginPath(); ellPath(b.x, b.y + 8, b.id === 'fuji' ? 190 : 70, b.id === 'fuji' ? 46 : 28); g.fillStyle = mix(c, '#ffffff', 0.65); g.globalAlpha = 0.85; g.fill(); g.globalAlpha = 1; g.strokeStyle = shade(c, -0.25); g.stroke();
   }
   g.setLineDash([]);

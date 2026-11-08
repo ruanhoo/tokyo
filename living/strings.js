@@ -20,8 +20,8 @@ window.TOKYO_LIVING_I18N = {
     logTitle: 'City journal',
     noMatches: 'No places match.',
     canvasAria: 'Interactive illustrated map of Tokyo with Tokyo Tower, the Yamanote loop, the Shinkansen and the subway. Use the list button for an accessible list of places.',
-    districts: { core: 'Central Tokyo', west: 'West: Shibuya & Shinjuku', east: 'East: Old Tokyo', bay: 'Tokyo Bay', trip: 'Day Trips' },
-    signs: { fuji: 'To Mt. Fuji · 100 km ➜', kamakura: 'To Kamakura · 50 km ➜', disney: 'To Disney Resort ➜' },
+    districts: { core: 'Central Tokyo', west: 'West: Shibuya & Shinjuku', east: 'East: Old Tokyo', bay: 'Tokyo Bay', trip: 'Day Trips', saitama: 'Saitama' },
+    signs: { fuji: 'To Mt. Fuji · 100 km ➜', kamakura: 'To Kamakura · 50 km ➜', disney: 'To Disney Resort ➜', omiya: 'To Saitama & Omiya · 30 km ➜' },
     shinLabel: '🚅 Shinkansen terminus',
     yamaLabel: '🟢 Yamanote Line',
     // Subway
@@ -72,7 +72,7 @@ window.TOKYO_LIVING_I18N = {
     logChat: '<b>{n}</b> chatted with <b>{m}</b>',
     logDecree: '📢 <b>Stationmaster</b>: {t}',
     logTrain: '🚅 {t}',
-    trainArr: '{n} is pulling into Tokyo Station', trainDep: '{n} departs Tokyo Station',
+    trainArr: '{n} is pulling into Tokyo Station', trainDep: '{n} departs Tokyo Station', trainOm: '{n} stops at Omiya Station in Saitama', omiyaPlat: 'Omiya',
   },
 
   zh: {
@@ -95,8 +95,8 @@ window.TOKYO_LIVING_I18N = {
     logTitle: '东京日志',
     noMatches: '没有匹配的地点。',
     canvasAria: '东京插画风互动地图，有东京塔、山手线、新干线和地铁。可点击“清单”按钮查看无障碍地点列表。',
-    districts: { core: '东京中心', west: '西侧 · 涩谷与新宿', east: '东侧 · 老东京', bay: '东京湾', trip: '一日游' },
-    signs: { fuji: '前往富士山 · 100 公里 ➜', kamakura: '前往镰仓 · 50 公里 ➜', disney: '前往迪士尼度假区 ➜' },
+    districts: { core: '东京中心', west: '西侧 · 涩谷与新宿', east: '东侧 · 老东京', bay: '东京湾', trip: '一日游', saitama: '埼玉' },
+    signs: { fuji: '前往富士山 · 100 公里 ➜', kamakura: '前往镰仓 · 50 公里 ➜', disney: '前往迪士尼度假区 ➜', omiya: '前往埼玉 · 大宫 · 30 公里 ➜' },
     shinLabel: '🚅 新干线终点站',
     yamaLabel: '🟢 山手线',
     subwayOn: '地铁透视',
@@ -143,6 +143,6 @@ window.TOKYO_LIVING_I18N = {
     logChat: '<b>{n}</b> 和 <b>{m}</b> 聊了几句',
     logDecree: '📢 <b>站长</b>：{t}',
     logTrain: '🚅 {t}',
-    trainArr: '{n} 驶入东京站', trainDep: '{n} 从东京站发车',
+    trainArr: '{n} 驶入东京站', trainDep: '{n} 从东京站发车', trainOm: '{n} 停靠埼玉的大宫站', omiyaPlat: '大宫',
   },
 };

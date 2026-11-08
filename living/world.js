@@ -62,8 +62,9 @@ const DIST = {
   east: { c: '#f2a21a', ids: ['sensoji', 'skytree', 'ueno', 'akihabara', 'tempura', 'omurice'] },
   bay: { c: '#27a9df', ids: ['odaiba', 'disney'] },
   trip: { c: '#ff8fb3', ids: ['fuji', 'kamakura'] },
+  saitama: { c: '#2fb59a', ids: ['omiya', 'railwaymuseum', 'bonsai', 'kawagoe', 'unagi'] },
 };
-const ORDER = ['core', 'west', 'east', 'bay', 'trip'];
+const ORDER = ['core', 'west', 'east', 'bay', 'trip', 'saitama'];
 const distOf = {};
 ORDER.forEach((k) => DIST[k].ids.forEach((id) => { distOf[id] = k; }));
 
@@ -75,10 +76,12 @@ const KIND = {
   shinjuku: { k: 'twin', w: 84, hh: 140 }, sensoji: { k: 'temple', w: 96, hh: 86 }, skytree: { k: 'skytree', w: 60, hh: 250 },
   ueno: { k: 'panda', w: 84, hh: 62 }, akihabara: { k: 'neon', w: 78, hh: 96 }, odaiba: { k: 'ferris', w: 108, hh: 120 },
   fuji: { k: 'fuji', w: 300, hh: 190 }, kamakura: { k: 'buddha', w: 76, hh: 84 }, disney: { k: 'dcastle', w: 104, hh: 126 },
+  omiya: { k: 'omiya', w: 122, hh: 84 }, railwaymuseum: { k: 'museum', w: 118, hh: 86 }, bonsai: { k: 'bonsai', w: 90, hh: 62 }, kawagoe: { k: 'belltower', w: 60, hh: 112 },
 };
 const WALLS = ['#fff1d6', '#ffe9c9', '#fde2e4', '#e3f4ec', '#e6f1fb', '#fff6c9'];
-const OVERRIDE = { tokyostation: [118, -58], fuji: [-1560, -640], kamakura: [-700, 1380], disney: [1500, 880], odaiba: [358, 930] };
-const PINNED = new Set(['tokyostation', 'tokyotower', 'skytree', 'odaiba', 'disney', 'fuji', 'kamakura', 'imperial']);
+const OVERRIDE = { tokyostation: [118, -58], fuji: [-1560, -640], kamakura: [-700, 1380], disney: [1500, 880], odaiba: [358, 930],
+  omiya: [-135, -1500], railwaymuseum: [-330, -1660], bonsai: [190, -1610], kawagoe: [-650, -1470], unagi: [-300, -1260] };
+const PINNED = new Set(['tokyostation', 'tokyotower', 'skytree', 'odaiba', 'disney', 'fuji', 'kamakura', 'imperial', 'omiya', 'railwaymuseum', 'bonsai', 'kawagoe', 'unagi']);
 
 /* ================= geometry helpers ================= */
 const segDist = (px, py, s) => {
@@ -134,9 +137,10 @@ function pathNearest(path, x, y) {
 // Yamanote loop (closed, clockwise = increasing s)
 const YAMA_PATH = mkPath(chaikin(GEO.YAMA.map((s) => [s.x, s.y]), true, 2), true);
 const YAMA_ST = GEO.YAMA.map((s, i) => ({ ...s, i, no: i === 0 ? 1 : 29 - i, s: pathNearest(YAMA_PATH, s.x, s.y) }));
-// Shinkansen lines both END at Tokyo Station (their paths start at the buffer stops and run outward off the map)
+// Shinkansen lines both END at Tokyo Station (their paths start at the buffer stops and run outward off the map); the Tohoku line also calls at Omiya
 const SHN = {
-  tohoku: { c: '#2f9e6a', c2: '#ffffff', path: mkPath(chaikin([[225, -104], [225, -330], [232, -520], [176, -650], [150, -790], [124, -900], [160, -1020], [232, -1110], [310, -1210], [380, -1330]], false, 2), false) },
+  // the Tohoku line runs north through Omiya (Saitama), straight along x = 0 so the platforms sit square
+  tohoku: { c: '#2f9e6a', c2: '#ffffff', path: mkPath(chaikin([[225, -104], [225, -330], [232, -520], [176, -650], [150, -790], [110, -930], [60, -1080], [20, -1190], [0, -1290], [0, -1400], [0, -1520], [0, -1640], [0, -1760], [30, -1860], [80, -1960], [140, -2080], [200, -2200]], false, 2), false) },
   tokaido: { c: '#2f7fe0', c2: '#ffffff', path: mkPath(chaikin([[225, -48], [190, 60], [118, 200], [40, 380], [-30, 560], [-110, 740], [-170, 900], [-250, 1040], [-390, 1160], [-570, 1290], [-800, 1440], [-1100, 1620], [-1250, 1800]], false, 2), false) },
 };
 const railPts = [];
@@ -233,6 +237,12 @@ addRoad([[-380, 970], [-380, 1195], [-150, 1195]], 20);
 addRoad([[-530, 970], [-570, 1200], [-640, 1330], [-700, 1380]], 20);
 addRoad([[-980, -230], [-1200, -300], [-1400, -500], [-1560, -640]], 20);
 addRoad([[970, 670], [1173, 700], [1400, 790], [1500, 880]], 20);
+// Saitama: a road north from the grid, then a small street grid around Omiya
+addRoad([[-80, -980], [-90, -1150], [-120, -1330]], 20);
+addRoad([[-720, -1330], [-250, -1330], [-120, -1330], [150, -1330], [330, -1330]], 20);
+addRoad([[-720, -1550], [-250, -1550], [150, -1550], [330, -1550]], 17);
+addRoad([[-250, -1330], [-250, -1550], [-250, -1720]], 17);
+addRoad([[150, -1330], [150, -1550], [150, -1720]], 17);
 // the Rainbow Bridge to Odaiba (the deck is drawn separately)
 const RB = [[140, 596], [230, 760], [315, 880], [358, 930]];
 joinGrid(RB[0][0], RB[0][1]); addRoad(RB, 20);
@@ -299,6 +309,15 @@ for (let i = 0; i < LX.length - 1; i++) for (let j = 0; j < LY.length - 1; j++) 
     lots.push({ x, y, w: 26 + rnd() * 10, h: Math.round(h), tall: big, wall: big ? TOWER_WALLS[Math.floor(rnd() * TOWER_WALLS.length)] : WALLS[Math.floor(rnd() * WALLS.length)], roof: ROOFS[Math.floor(rnd() * ROOFS.length)], id: lots.length });
   }
 }
+// Saitama: low town blocks around Omiya, a few taller office buildings by the station
+for (let t = 0, tries = 0; t < 70 && tries < 900; tries++) {
+  const x = -740 + rnd() * 1080; const y = -1700 + rnd() * 450;
+  if (nearBuilding(x, y, 6) || nearBuilding(x, y - 36, 6) || nearRoad(x, y, 22) || railDist(x, y) < 44) continue;
+  if (buildings.some((b) => b.dist === 'saitama' && Math.abs(x - b.x) < b.w / 2 + 34 && y > b.y - 40 && y < b.y + b.hh + 30)) continue; // never hide a landmark behind a block
+  if (lots.some((l) => Math.abs(l.x - x) < l.w + 6 && Math.abs(l.y - y) < 34)) continue;
+  const near = clamp(1 - Math.hypot(x + 135, (y + 1500) * 1.2) / 300, 0, 1); const big = near > 0.35;
+  lots.push({ x, y, w: 26 + rnd() * 10, h: Math.round(big ? 50 + near * 70 + rnd() * 30 : 20 + rnd() * 26), tall: big, wall: big ? TOWER_WALLS[Math.floor(rnd() * TOWER_WALLS.length)] : WALLS[Math.floor(rnd() * WALLS.length)], roof: ROOFS[Math.floor(rnd() * ROOFS.length)], id: lots.length }); t++;
+}
 // trees: parks, ring of the palace moat, scattered street trees and the countryside
 GEO.parks.concat([{ ...GEO.palace, x: GEO.palace.x, y: GEO.palace.y + 12, rx: GEO.palace.rx - 24, ry: GEO.palace.ry - 24 }]).forEach((pk, n) => {
   const cnt = Math.round((pk.rx * pk.ry) / 520);
@@ -310,13 +329,13 @@ for (let t = 0, tries = 0; t < 70 && tries < 800; tries++) {
   trees.push({ x, y, s: 0.7 + rnd() * 0.5, c: rnd() }); t++;
 }
 const OUTSIDE = (x, y) => x < -1010 || x > 1060 || y < -1010 || y > 1060;
-for (let t = 0, tries = 0; t < 240 && tries < 4000; tries++) {
+for (let t = 0, tries = 0; t < 320 && tries < 6000; tries++) {
   const x = GEO.WORLD.x0 + 30 + rnd() * (GEO.WORLD.x1 - GEO.WORLD.x0 - 60); const y = GEO.WORLD.y0 + 130 + rnd() * (GEO.WORLD.y1 - GEO.WORLD.y0 - 190);
   if (!OUTSIDE(x, y) || inWaterAt(x, y, 24) || nearBuilding(x, y, 18) || nearRoad(x, y, 22) || railDist(x, y) < 34) continue;
   trees.push({ x, y, s: 0.75 + rnd() * 0.55, c: rnd() }); t++;
 }
 // countryside houses (suburbs) away from the dense core
-for (let t = 0, tries = 0; t < 120 && tries < 3000; tries++) {
+for (let t = 0, tries = 0; t < 150 && tries < 4000; tries++) {
   const x = GEO.WORLD.x0 + 60 + rnd() * (GEO.WORLD.x1 - GEO.WORLD.x0 - 120); const y = GEO.WORLD.y0 + 160 + rnd() * (GEO.WORLD.y1 - GEO.WORLD.y0 - 260);
   if (!OUTSIDE(x, y) || inWaterAt(x, y, 30) || nearBuilding(x, y, 40) || nearRoad(x, y, 24) || railDist(x, y) < 40 || trees.some((q) => Math.hypot(q.x - x, (q.y - y) * 1.4) < 26)) continue;
   houses.push({ x, y, w: 24 + rnd() * 10, h: 13 + rnd() * 8, wall: WALLS[Math.floor(rnd() * WALLS.length)], roof: ROOFS[Math.floor(rnd() * ROOFS.length)] }); t++;
@@ -329,7 +348,7 @@ for (let x = GEO.WORLD.x0; x < GEO.WORLD.x1; x += 120 + rnd() * 50) hills.push({
 for (let y = -700; y < 1200; y += 220 + rnd() * 80) if (y < -150 || y > 700) hills.push({ x: GEO.WORLD.x0 + 40 + rnd() * 60, y, w: 150 + rnd() * 50, hgt: 60 + rnd() * 50, lean: (rnd() - 0.5) * 0.3, c: rnd() < 0.5 ? '#8fb56a' : '#a3c27a', snow: false });
 
 const clouds = Array.from({ length: 10 }, () => ({ x: rnd() * 4000 - 2000, y: rnd() * 3000 - 1300, s: 0.6 + rnd() * 0.8, v: 6 + rnd() * 8 }));
-const tufts = Array.from({ length: 420 }, () => ({ x: GEO.WORLD.x0 + rnd() * (GEO.WORLD.x1 - GEO.WORLD.x0), y: GEO.WORLD.y0 + rnd() * (GEO.WORLD.y1 - GEO.WORLD.y0), s: 0.7 + rnd() * 0.7 }))
+const tufts = Array.from({ length: 540 }, () => ({ x: GEO.WORLD.x0 + rnd() * (GEO.WORLD.x1 - GEO.WORLD.x0), y: GEO.WORLD.y0 + rnd() * (GEO.WORLD.y1 - GEO.WORLD.y0), s: 0.7 + rnd() * 0.7 }))
   .filter((t) => !inWaterAt(t.x, t.y, 10) && !nearRoad(t.x, t.y, 6) && OUTSIDE(t.x, t.y));
 const waves = Array.from({ length: 150 }, () => ({ x: GEO.WORLD.x0 + rnd() * (GEO.WORLD.x1 - GEO.WORLD.x0 + 80), y: -200 + rnd() * 2000, s: 0.7 + rnd() * 0.7 }))
   .filter((w) => inSea(w.x, w.y) && !inEll(GEO.odaiba, w.x, w.y, 30) && !inEll(GEO.disney, w.x, w.y, 30));

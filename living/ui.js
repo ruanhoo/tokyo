@@ -167,13 +167,13 @@ const LABEL_AT = (() => {
   const at = {};
   ORDER.forEach((k) => {
     const mem = buildings.filter((b) => b.dist === k);
-    at[k] = [mem.reduce((a, b) => a + b.x, 0) / mem.length, Math.min(...mem.map((b) => b.y)) - (k === 'trip' ? 150 : 100)];
+    at[k] = [mem.reduce((a, b) => a + b.x, 0) / mem.length, Math.min(...mem.map((b) => b.y)) - (k === 'trip' || k === 'saitama' ? 150 : 100)];
   });
   at.core = [at.core[0] + 20, at.core[1] - 30];
   return at;
 })();
 // road-sign style pills toward the day trips, placed on the way out of town
-const TRIP_SIGNS = ['fuji', 'kamakura', 'disney'].map((id) => {
+const TRIP_SIGNS = ['fuji', 'kamakura', 'disney', 'omiya'].map((id) => {
   const b = bById.get(id); const d = Math.hypot(b.x, b.y) || 1; const r = Math.min(1, 900 / d);
   return { id, x: b.x * r, y: b.y * r };
 });
@@ -492,7 +492,7 @@ function highlightList() { document.querySelectorAll('#list .it').forEach((el) =
 $('q').addEventListener('input', (e) => { query = e.target.value; buildList(); });
 
 /* ---------- route planner ---------- */
-const DUR = { tokyotower: 60, skytree: 90, sensoji: 60, shibuya: 30, meiji: 60, disney: 480, fuji: 360, kamakura: 240, odaiba: 120, ueno: 120, imperial: 60, akihabara: 60, shinjuku: 45, harajuku: 45, ginza: 60, tsukiji: 60, tokyostation: 30, roppongi: 60 };
+const DUR = { tokyotower: 60, skytree: 90, sensoji: 60, shibuya: 30, meiji: 60, disney: 480, fuji: 360, kamakura: 240, odaiba: 120, ueno: 120, imperial: 60, akihabara: 60, shinjuku: 45, harajuku: 45, ginza: 60, tsukiji: 60, tokyostation: 30, roppongi: 60, omiya: 30, railwaymuseum: 150, bonsai: 60, kawagoe: 120 };
 const MODES = { walk: [4.5, 0], bike: [12, 3], metro: [20, 12], taxi: [24, 6] };
 const PACES = { fast: 0.7, normal: 1, slow: 1.4 };
 const STARTS = { tokyo: { lat: 35.6812, lng: 139.7671 }, shinjuku: { lat: 35.6896, lng: 139.7006 }, haneda: { lat: 35.5494, lng: 139.7798 } };
@@ -669,8 +669,8 @@ updateCars(0);
 const warm = qs.has('warm') ? +qs.get('warm') || 0 : 25;
 if (!paused) for (let i = 0; i < warm * 10; i++) { time += 0.1; updatePeople(0.1, time); updateCars(0.1); updateTransit(0.1); if (i % 7 === 0) chatter(time); }
 setTrainEvents((t, ev) => {
-  if (ev !== 'arrive' && ev !== 'depart') return;
-  addLog(tx('logTrain'), { t: fill(tx(ev === 'arrive' ? 'trainArr' : 'trainDep'), { n: tx('trains')[t.line].name }) }, 'train');
+  if (ev !== 'arrive' && ev !== 'depart' && ev !== 'omiya') return;
+  addLog(tx('logTrain'), { t: fill(tx(ev === 'omiya' ? 'trainOm' : ev === 'arrive' ? 'trainArr' : 'trainDep'), { n: tx('trains')[t.line].name }) }, 'train');
 });
 if (qs.get('cam')) { const [cx, cy, cz] = qs.get('cam').split(',').map(Number); Object.assign(cam, { x: cx, y: cy, z: cz, tx: cx, ty: cy, tz: cz }); }
 if (qs.get('view') === 'world') { fitAll(); cam.x = cam.tx; cam.y = cam.ty; cam.z = cam.tz; }
