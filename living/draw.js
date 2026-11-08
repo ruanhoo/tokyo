@@ -443,22 +443,61 @@ function drawPerson(p) {
   g.lineWidth = Math.max(1.1 / k, 1.6); g.strokeStyle = INK; g.lineJoin = 'round'; g.lineCap = 'round';
   const sw = p.moving ? Math.sin(p.ph) * 4 : 0; const bob = p.moving ? -Math.abs(Math.sin(p.ph)) * 1.6 : Math.sin(time * 2 + p.id) * 0.4;
   ell(0, 0, 8, 3, 'rgba(0,0,0,.2)');
-  const f = p.face; const suit = p.style === 3; const uni = p.style === 4;
-  const top = uni ? '#1d3a6e' : suit ? '#3b3f58' : p.shirt;
-  g.save(); g.lineWidth = 3.6; g.strokeStyle = uni ? '#14284d' : suit ? '#2d2f45' : '#3b3a4a';
-  g.beginPath(); g.moveTo(-2.6, -9 + bob); g.lineTo(-2.6 + sw, -0.5); g.moveTo(2.6, -9 + bob); g.lineTo(2.6 - sw, -0.5); g.stroke(); g.restore();
-  box(-6, -21 + bob, 12, 13, top, 4.5);
-  if (suit) { poly([[-2, -21 + bob], [2, -21 + bob], [0, -13 + bob]], '#ffffff'); poly([[-1, -20 + bob], [1, -20 + bob], [1.2, -13 + bob], [-1.2, -13 + bob]], '#e8503a'); }
-  if (uni) { g.save(); g.fillStyle = '#ffc93c'; g.fillRect(-5.5, -11 + bob, 11, 2); g.beginPath(); g.arc(-2, -17 + bob, 1.1, 0, TAU); g.arc(2, -17 + bob, 1.1, 0, TAU); g.fill(); g.restore(); }
-  g.save(); g.lineWidth = 3; g.strokeStyle = shade(top.length === 7 ? top : '#888888', -0.3);
+  const f = p.face; const uni = p.outfit === 'uniform'; const kim = p.outfit === 'kimono'; const hak = p.outfit === 'hakama'; const suit = p.outfit === 'suit';
+  const SK = '#ffdcb8';
+  const sc = SUITS[p.col % SUITS.length];
+  const top = uni ? '#1d3a6e' : suit ? sc : kim ? KIMONO[p.col % KIMONO.length] : '#2d3a5a';
+  if (kim || hak) {
+    // traditional dress: white tabi socks on wooden geta, long skirt hides the legs
+    box(-5 + sw, -2.6, 4.6, 2.6, '#f4efe6', 1); box(0.4 - sw, -2.6, 4.6, 2.6, '#f4efe6', 1);
+    g.save(); g.fillStyle = '#8a5a34'; g.fillRect(-4 + sw, 0, 1.4, 1.6); g.fillRect(-1.4 + sw, 0, 1.4, 1.6); g.fillRect(1.4 - sw, 0, 1.4, 1.6); g.fillRect(3.6 - sw, 0, 1.4, 1.6); g.restore();
+  } else {
+    g.save(); g.lineWidth = 3.6; g.strokeStyle = uni ? '#14284d' : shade(sc, -0.25);
+    g.beginPath(); g.moveTo(-2.6, -9 + bob); g.lineTo(-2.6 + sw, -0.5); g.moveTo(2.6, -9 + bob); g.lineTo(2.6 - sw, -0.5); g.stroke(); g.restore();
+    if (suit) { ell(-2.6 + sw, 0.2, 3, 1.6, '#1c1a22'); ell(2.6 - sw, 0.2, 3, 1.6, '#1c1a22'); }
+  }
+  let armC = shade(top.length === 7 ? top : '#888888', -0.3);
+  if (kim) {
+    const obi = OBI[p.col % OBI.length]; const hem = sw * 0.35;
+    poly([[-5.5, -21 + bob], [5.5, -21 + bob], [7 + hem, -2], [-7 + hem, -2]], top);
+    g.save(); g.fillStyle = 'rgba(255,255,255,.7)'; g.lineWidth = 0;
+    [[-3, -8], [2.5, -5], [-1, -3.5], [3.5, -11]].forEach((d) => { g.beginPath(); g.arc(d[0], d[1] + bob * 0.3, 1.1, 0, TAU); g.fill(); }); g.restore();
+    poly([[-2.4, -21 + bob], [2.4, -21 + bob], [0, -14 + bob]], '#fffaf0');
+    box(-6.2, -15 + bob, 12.4, 5, obi, 1); box(f > 0 ? -10 : 5.5, -16 + bob, 4.6, 7, shade(obi, -0.1), 1.5);
+  } else if (hak) {
+    poly([[-5.5, -12 + bob], [5.5, -12 + bob], [8 + sw * 0.3, -2], [-8 + sw * 0.3, -2]], HAKAMA[p.col % HAKAMA.length]);
+    g.save(); g.lineWidth = 0.9; g.beginPath(); g.moveTo(-1.8, -11.5 + bob); g.lineTo(-2.6 + sw * 0.1, -2.5); g.moveTo(1.8, -11.5 + bob); g.lineTo(2.6 + sw * 0.1, -2.5); g.stroke(); g.restore();
+    box(-6, -21 + bob, 12, 10, top, 3.5);
+    poly([[-2.4, -21 + bob], [2.4, -21 + bob], [0, -14 + bob]], '#fffaf0');
+    box(-5.8, -13.2 + bob, 11.6, 2.2, '#e8e2d2', 0.8);
+    g.save(); g.fillStyle = '#fffaf0'; g.beginPath(); g.arc(-3.2, -18 + bob, 0.9, 0, TAU); g.arc(3.2, -18 + bob, 0.9, 0, TAU); g.fill(); g.restore();
+  } else {
+    box(-6, -21 + bob, 12, 13, top, 4.5);
+    // white shirt, collar, neat tie and jacket lapels
+    poly([[-2.6, -21 + bob], [2.6, -21 + bob], [0, -12 + bob]], '#ffffff');
+    const tc = TIES[(p.col * 5 + 2) % TIES.length];
+    if (uni) { g.save(); g.fillStyle = '#ffc93c'; g.fillRect(-5.5, -11 + bob, 11, 2); g.beginPath(); g.arc(-2, -17 + bob, 1.1, 0, TAU); g.arc(2, -17 + bob, 1.1, 0, TAU); g.fill(); g.restore(); }
+    else {
+      poly([[-0.9, -20 + bob], [0.9, -20 + bob], [0.7, -18.2 + bob], [-0.7, -18.2 + bob]], tc);
+      poly([[-0.8, -18.2 + bob], [0.8, -18.2 + bob], [1.5, -12 + bob], [0, -10.5 + bob], [-1.5, -12 + bob]], tc);
+      g.save(); g.lineWidth = 0.9; g.beginPath(); g.moveTo(-2.6, -21 + bob); g.lineTo(-3.6, -13 + bob); g.moveTo(2.6, -21 + bob); g.lineTo(3.6, -13 + bob); g.stroke(); g.restore();
+    }
+  }
+  // arms: sleeves of the jacket, haori or the wide kimono sleeve
+  g.save(); g.lineWidth = 3; g.strokeStyle = armC;
   g.beginPath(); g.moveTo(-6, -18 + bob); g.lineTo(-8, -12 + bob - sw * 0.3); g.moveTo(6, -18 + bob); g.lineTo(8, -12 + bob + sw * 0.3); g.stroke(); g.restore();
-  if (uni) { ell(-8, -11 + bob - sw * 0.3, 2.2, 2.2, '#ffffff'); ell(8, -11 + bob + sw * 0.3, 2.2, 2.2, '#ffffff'); }
-  if (suit) box(f * 8 - 4, -9 + bob + sw * 0.3, 8, 6, '#6b4a30', 1.5);
+  if (kim) {
+    poly([[-5.8, -20 + bob], [-10.5, -18 + bob], [-11 + sw * 0.1, -8 + bob - sw * 0.2], [-6.2, -11 + bob]], shade(top, 0.05));
+    poly([[5.8, -20 + bob], [10.5, -18 + bob], [11 + sw * 0.1, -8 + bob + sw * 0.2], [6.2, -11 + bob]], shade(top, 0.05));
+  } else {
+    ell(-8, -11 + bob - sw * 0.3, 2.2, 2.2, uni ? '#ffffff' : SK); ell(8, -11 + bob + sw * 0.3, 2.2, 2.2, uni ? '#ffffff' : SK);
+  }
+  if (suit && p.col % 2 === 0) box(f * 8 - 4, -8 + bob + sw * 0.3, 8, 6, '#6b4a30', 1.5);
   const hy = -28 + bob;
-  ell(0, hy, 7.6, 7.6, '#ffdcb8', true);
+  ell(0, hy, 7.6, 7.6, SK, true);
   g.beginPath(); g.arc(0, hy, 7.8, Math.PI * 1.02, Math.PI * 1.98); g.closePath(); g.fillStyle = p.hair; g.fill(); g.stroke();
-  if (p.style === 1) ell(-f * 8, hy - 3, 3.4, 5, p.hair, true);
-  if (p.style === 2) { g.beginPath(); g.arc(0, hy - 1, 8, Math.PI, TAU); g.closePath(); g.fillStyle = p.shirt; g.fill(); g.stroke(); box(f > 0 ? 2 : -12, hy - 2, 10, 2.5, shade(p.shirt, -0.25), 1); }
+  if (p.style === 1 && !kim) ell(-f * 8, hy - 3, 3.4, 5, p.hair, true);
+  if (kim) { ell(0, hy - 9, 3.8, 3.2, p.hair, true); ell(f * 3, hy - 9.5, 1.7, 1.7, '#ff7aa2', true); }
   if (uni) { box(-9, hy - 12, 18, 6, '#1d3a6e', 2); box(-9, hy - 8, 18, 2.5, '#ffc93c', 0.5); box(f > 0 ? 0 : -11, hy - 6.5, 11, 2.5, '#14284d', 1); }
   g.fillStyle = INK; g.beginPath(); g.arc(f * 2.2 - 2.4, hy + 0.5, 1.2, 0, TAU); g.arc(f * 2.2 + 2.4, hy + 0.5, 1.2, 0, TAU); g.fill();
   g.fillStyle = 'rgba(255,120,120,.45)'; g.beginPath(); g.arc(f * 2.2 - 4.6, hy + 3, 1.7, 0, TAU); g.arc(f * 2.2 + 4.6, hy + 3, 1.7, 0, TAU); g.fill();

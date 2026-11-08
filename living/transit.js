@@ -189,7 +189,7 @@ const SUBST = (() => {
   return [...m.values()];
 })();
 SUBLINES.forEach((l) => { l.path = mkPath(l.stops.map((s) => [s.x, s.y]), false); });
-const SHIRT_C = ['#ff8a5c', '#5b9bd5', '#ffd166', '#5cc8b0', '#ffffff', '#b48ad8', '#ff7aa2', '#7ccf6e'];
+const SHIRT_C = ['#2f3347', '#3b3f58', '#23262f', '#4a4f66', '#2c3a4f', '#3b3f58', '#2f3347', '#e8647a', '#ffffff'];
 const HAIR_C = ['#1f1a1a', '#2b2b3a', '#3b2a20', '#5a3d2b', '#c98f4e'];
 const metroTrains = [];
 SUBLINES.forEach((l) => {

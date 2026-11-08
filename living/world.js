@@ -335,7 +335,12 @@ const waves = Array.from({ length: 150 }, () => ({ x: GEO.WORLD.x0 + rnd() * (GE
   .filter((w) => inSea(w.x, w.y) && !inEll(GEO.odaiba, w.x, w.y, 30) && !inEll(GEO.disney, w.x, w.y, 30));
 
 /* ================= people ================= */
-const SHIRT = ['#ff8a5c', '#5b9bd5', '#ffd166', '#5cc8b0', '#ffffff', '#b48ad8', '#ff7aa2', '#7ccf6e'];
+// most people wear business suits and ties; roughly one in four wears traditional dress
+const SUITS = ['#2f3347', '#3b3f58', '#23262f', '#4a4f66', '#2c3a4f', '#3d3a46'];
+const TIES = ['#e8503a', '#2f7fe0', '#8a2b3d', '#1f8a70', '#f2a21a', '#6b4fb5'];
+const KIMONO = ['#e8647a', '#f2a21a', '#7a6bd8', '#3aa88b', '#d94f4f', '#5b9bd5'];
+const OBI = ['#ffd166', '#2d2a32', '#ffffff', '#e8503a'];
+const HAKAMA = ['#7d8aa0', '#5f6f8a', '#8a7d6b', '#4f5d75'];
 const HAIR = ['#1f1a1a', '#2b2b3a', '#3b2a20', '#5a3d2b', '#c98f4e'];
 const people = [];
 const pickPlace = () => { let k; do { k = Math.floor(Math.random() * buildings.length); } while (buildings[k].p.far && Math.random() < 0.7); return k; };
@@ -350,14 +355,14 @@ for (let i = 0; i < 38; i++) {
   const b = homeNodes[Math.floor(rnd() * homeNodes.length)];
   const p = {
     id: i, nameIdx: i, x: b.x + (rnd() - 0.5) * 20, y: b.y + 18,
-    shirt: SHIRT[i % 8], hair: HAIR[i % 5], style: i % 4, v: 30 + rnd() * 18, k: 1,
+    outfit: i % 4 !== 3 ? 'suit' : i % 8 === 3 ? 'kimono' : 'hakama', col: i, hair: HAIR[i % 5], style: i % 4 === 3 && i % 8 === 3 ? 1 : i % 3, v: 30 + rnd() * 18, k: 1,
     wait: rnd() * 6, ph: rnd() * 6, face: 1, say: '', sayT: 0, cool: rnd() * 6, path: [], moving: false, eatEmoji: '', eatT: 0, replyAt: 0, replyTxt: '',
   };
   goPlace(p, pickPlace());
   people.push(p);
 }
 const master = {
-  id: 99, owner: true, nameIdx: 0, x: GEO.P(35.6812, 139.7671)[0] + 40, y: GEO.P(35.6812, 139.7671)[1] + 44, shirt: '#1d3a6e', hair: '#2b2b3a', style: 4, v: 34, k: 1.3,
+  id: 99, owner: true, nameIdx: 0, x: GEO.P(35.6812, 139.7671)[0] + 40, y: GEO.P(35.6812, 139.7671)[1] + 44, outfit: 'uniform', col: 0, hair: '#2b2b3a', style: 0, v: 34, k: 1.3,
   wait: 3, ph: 0, face: 1, say: '', sayT: 0, cool: 10, path: [], moving: false, eatEmoji: '', eatT: 0, decT: 12, replyAt: 0, replyTxt: '',
 };
 people.push(master);
