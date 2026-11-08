@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Hello Tokyo! A cartoon guide to sights &amp; food</title>
+  <meta name="description" content="A cartoon-style travel guide to Tokyo, Japan: explore Tokyo Tower, Shibuya, the subway, the Shinkansen and street food on an interactive map.">
+  <meta name="theme-color" content="#ffc93c">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%97%BC%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="vendor/leaflet.css">
+  <link rel="stylesheet" href="vendor/MarkerCluster.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip" href="#explore" data-i18n="skip">Skip to the map</a>
+
+  <header class="site-header">
+    <a class="brand" href="#top" data-i18n-aria="brandAria" aria-label="Hello Tokyo home">
+      <span class="brand__icon" aria-hidden="true">🗼</span>
+      <span class="brand__text" data-i18n="brand">Hello Tokyo!</span>
+    </a>
+    <div class="header__right">
+      <nav class="nav" aria-label="Main">
+        <a href="#explore" data-i18n="navMap">Map</a>
+        <a href="#tips" data-i18n="navTips">Tips</a>
+        <a href="living/index.html" data-i18n="navCity">Living-city version</a>
+      </nav>
+      <div class="lang" role="group" data-i18n-aria="langAria" aria-label="Language">
+        <button type="button" data-lang="en" lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="zh" lang="zh" aria-pressed="false">中文</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero__copy">
+        <p class="sticker" data-i18n="sticker">東京 · Tokyo, Japan</p>
+        <h1 data-i18n-html="heroTitleHtml">Welcome to <span class="hl">Tokyo!</span></h1>
+        <p class="hero__lead" data-i18n="heroLead">Ride a bullet train, squeeze onto the subway, climb a red tower and slurp ramen under the glowing neon. Your cartoon guide to the busiest city on Earth.</p>
+        <a class="btn" href="#explore" data-i18n="openMap">🗺️ Open the map</a>
+      </div>
+
+      <div class="hero__art" aria-hidden="true">
+        <svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg" focusable="false">
+          <g stroke="#2d2a32" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+            <rect x="0" y="0" width="600" height="420" fill="#bfe8fb" stroke="none"/>
+
+            <!-- sun -->
+            <g class="sun">
+              <circle cx="500" cy="92" r="64" fill="none" stroke="#ffc93c" stroke-width="10" stroke-dasharray="4 20"/>
+              <circle cx="500" cy="92" r="42" fill="#ffd95a"/>
+              <circle cx="487" cy="86" r="4.5" fill="#2d2a32" stroke="none"/>
+              <circle cx="513" cy="86" r="4.5" fill="#2d2a32" stroke="none"/>
+              <path d="M486 102 Q500 116 514 102" fill="none"/>
+              <circle cx="477" cy="100" r="6" fill="#ff9ebb" stroke="none" opacity=".8"/>
+              <circle cx="523" cy="100" r="6" fill="#ff9ebb" stroke="none" opacity=".8"/>
+            </g>
+
+            <!-- clouds -->
+            <g class="cloud cloud--a" fill="#fff">
+              <path d="M70 120 q-30 0 -30 -22 q0 -22 28 -22 q6 -22 36 -20 q26 2 28 24 q26 2 24 22 q-2 18 -26 18 z"/>
+            </g>
+            <g class="cloud cloud--b" fill="#fff">
+              <path d="M300 70 q-24 0 -24 -17 q0 -17 22 -17 q5 -17 28 -15 q21 2 22 19 q20 2 19 17 q-2 13 -20 13 z"/>
+            </g>
+
+            <!-- Mt. Fuji -->
+            <path d="M-20 330 L190 120 Q210 104 230 120 L440 330 Z" fill="#8fb0e8"/>
+            <path d="M158 152 L190 120 Q210 104 230 120 L262 152 L240 142 L222 158 L206 140 L190 160 L176 142 Z" fill="#fff"/>
+
+            <!-- skyline -->
+            <g fill="#a9b6d6">
+              <rect x="20" y="236" width="46" height="110"/>
+              <rect x="70" y="212" width="38" height="134"/>
+              <rect x="112" y="250" width="50" height="96"/>
+              <rect x="410" y="222" width="42" height="124"/>
+              <rect x="456" y="196" width="36" height="150"/>
+              <rect x="496" y="240" width="52" height="106"/>
+              <rect x="550" y="214" width="40" height="132"/>
+            </g>
+            <g fill="#ffe9a0" stroke="none">
+              <rect x="30" y="250" width="8" height="8"/><rect x="46" y="250" width="8" height="8"/><rect x="30" y="272" width="8" height="8"/><rect x="46" y="294" width="8" height="8"/>
+              <rect x="80" y="228" width="8" height="8"/><rect x="94" y="250" width="8" height="8"/><rect x="80" y="272" width="8" height="8"/>
+              <rect x="420" y="238" width="8" height="8"/><rect x="436" y="262" width="8" height="8"/><rect x="466" y="214" width="8" height="8"/><rect x="466" y="248" width="8" height="8"/>
+              <rect x="560" y="232" width="8" height="8"/><rect x="574" y="262" width="8" height="8"/><rect x="510" y="260" width="8" height="8"/>
+            </g>
+
+            <!-- Tokyo Tower -->
+            <g>
+              <path d="M270 346 L296 190 L304 190 L330 346 Z" fill="#ff5a3c"/>
+              <path d="M283 280 H317 M288 246 H312 M279 316 H321" fill="none" stroke="#fff" stroke-width="6"/>
+              <path d="M296 190 L300 120 L304 190 Z" fill="#fff"/>
+              <rect x="280" y="236" width="40" height="12" rx="3" fill="#fff"/>
+              <rect x="287" y="196" width="26" height="9" rx="3" fill="#ff5a3c"/>
+              <path d="M300 120 V92" fill="none"/>
+              <circle cx="300" cy="86" r="6" fill="#ffc93c"/>
+              <path d="M283 346 L300 270 L317 346" fill="none" stroke-width="3" opacity=".55"/>
+            </g>
+
+            <!-- elevated rail + Shinkansen -->
+            <rect x="-10" y="318" width="620" height="14" fill="#9aa0b4"/>
+            <path d="M40 332 V362 M140 332 V362 M240 332 V362 M340 332 V362 M440 332 V362 M540 332 V362" stroke-width="8" fill="none"/>
+            <g class="train">
+              <path d="M30 316 V296 Q30 282 46 282 H210 Q250 282 268 300 L276 316 Z" fill="#fff"/>
+              <path d="M30 306 H272" stroke="#2f6fe0" stroke-width="7" fill="none"/>
+              <path d="M214 286 H234 Q250 288 258 298 H214 Z" fill="#9fd8ff" stroke-width="3"/>
+              <path d="M56 288 H88 M104 288 H136 M152 288 H184" stroke="#9fd8ff" stroke-width="9" fill="none"/>
+              <circle cx="70" cy="318" r="6" fill="#2d2a32"/><circle cx="150" cy="318" r="6" fill="#2d2a32"/><circle cx="230" cy="318" r="6" fill="#2d2a32"/>
+            </g>
+
+            <!-- street -->
+            <rect x="-10" y="362" width="620" height="70" fill="#ffd9a8"/>
+            <path d="M-4 396 H610" stroke-dasharray="22 16" stroke-width="4" fill="none" opacity=".5"/>
+            </g>
+        </svg>
+      </div>
+    </section>
+
+    <!-- FACT STRIP -->
+    <section class="facts" data-i18n-aria="factsAria" aria-label="Quick facts">
+      <ul>
+        <li><span aria-hidden="true">👥</span><span data-i18n-html="fact1Html"><strong>~37 million</strong> people in Greater Tokyo</span></li>
+        <li><span aria-hidden="true">🚇</span><span data-i18n-html="fact2Html"><strong>13 subway lines</strong> under the streets</span></li>
+        <li><span aria-hidden="true">🚅</span><span data-i18n-html="fact3Html"><strong>Shinkansen</strong> bullet trains since 1964</span></li>
+        <li><span aria-hidden="true">🗼</span><span data-i18n-html="fact4Html"><strong>333 m</strong> Tokyo Tower, <strong>634 m</strong> Skytree</span></li>
+      </ul>
+    </section>
+
+    <!-- MAP -->
+    <section class="explore-section" id="explore" aria-labelledby="explore-title">
+      <div class="section-head">
+        <h2 id="explore-title" data-i18n="exploreTitle">Pick a spot on the map!</h2>
+        <div class="chips" role="group" data-i18n-aria="filterAria" aria-label="Show on map">
+          <button class="chip is-active" type="button" data-filter="all" aria-pressed="true" data-i18n="filterAll">🗺️ All</button>
+          <button class="chip" type="button" data-filter="sight" aria-pressed="false" data-i18n="filterSight">🗼 Sights</button>
+          <button class="chip" type="button" data-filter="food" aria-pressed="false" data-i18n="filterFood">🍣 Food</button>
+        </div>
+      </div>
+
+      <div class="explore">
+        <div class="map-wrap">
+          <div id="map" role="application" data-i18n-aria="mapAria" aria-label="Interactive map of Tokyo sights and food"></div>
+          <button id="fit" class="map-btn" type="button" data-i18n="resetView">🔭 Reset view</button>
+          <noscript><p class="noscript" data-i18n="noscript">The map needs JavaScript. Try enabling it!</p></noscript>
+        </div>
+        <ul id="list" class="list" data-i18n-aria="listAria" aria-label="Places"></ul>
+      </div>
+      <p class="note" data-i18n="note">Food pins mark neighbourhoods that are great for a dish, not endorsements of one shop. Opening hours and prices change, so check before you go.</p>
+    </section>
+
+    <!-- TIPS -->
+    <section class="tips" id="tips" aria-labelledby="tips-title">
+      <h2 id="tips-title" data-i18n="tipsTitle">Little tips for big adventures</h2>
+      <div class="tips__grid">
+        <article class="tip tip--yellow">
+          <span class="tip__icon" aria-hidden="true">🌸</span>
+          <h3 data-i18n="tip1Title">When to go</h3>
+          <p data-i18n="tip1">Late March to April (cherry blossoms) and October to November (autumn leaves) are the sweet spots. Summer is hot and humid.</p>
+        </article>
+        <article class="tip tip--sky">
+          <span class="tip__icon" aria-hidden="true">🚇</span>
+          <h3 data-i18n="tip2Title">Getting around</h3>
+          <p data-i18n="tip2">Get an IC card (Suica or PASMO) for subways, trains and even vending machines. Avoid the rush hours around 8–9 am and 6–7 pm.</p>
+        </article>
+        <article class="tip tip--pink">
+          <span class="tip__icon" aria-hidden="true">🚅</span>
+          <h3 data-i18n="tip3Title">Bullet trains</h3>
+          <p data-i18n="tip3">The Shinkansen leaves from Tokyo Station. Reserve a seat, and grab an ekiben bento box for the ride.</p>
+        </article>
+        <article class="tip tip--jade">
+          <span class="tip__icon" aria-hidden="true">💴</span>
+          <h3 data-i18n="tip4Title">Paying</h3>
+          <p data-i18n="tip4">Cards and IC cards work in most places, but small shops and old-school ramen counters are often cash only. Keep some yen. Tipping is not expected.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p data-i18n-html="footerHtml">Made with 🧡 for curious travellers. Map data © <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a> contributors, tiles © <a href="https://openstreetmap.jp/" rel="noopener">OpenStreetMap Japan</a>.</p>
+  </footer>
+
+  <script src="vendor/leaflet.js"></script>
+  <script src="vendor/leaflet.markercluster.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
